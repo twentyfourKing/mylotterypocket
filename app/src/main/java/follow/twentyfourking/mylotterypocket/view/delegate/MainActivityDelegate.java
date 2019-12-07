@@ -32,8 +32,6 @@ import follow.twentyfourking.mylotterypocket.viewmodel.viewmodel.MainViewModel;
  * activity_main.xml
  */
 public class MainActivityDelegate {
-    @BindView(R.id.tl_title_container)
-    RelativeLayout mTitleParent;
     @BindView(R.id.tab_main)
     TabLayout mTabLayout;
     @BindView(R.id.vp_main)
