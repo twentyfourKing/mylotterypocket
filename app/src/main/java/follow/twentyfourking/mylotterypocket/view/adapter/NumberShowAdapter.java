@@ -64,6 +64,10 @@ public class NumberShowAdapter extends RecyclerView.Adapter<NumberShowAdapter.Nu
         notifyDataSetChanged();
     }
 
+    public List<String> getData(){
+        return mData;
+    }
+
     public void updateItem(List<String> data, int position) {
         mData = data;
         notifyItemChanged(position);

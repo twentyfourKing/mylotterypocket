@@ -66,6 +66,7 @@
 
 
     <LinearLayout
+        android:id="@+id/ll_create_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tv_create_state"
@@ -136,6 +137,33 @@
                 android:padding="2dp"
                 android:text="1" />
         </RelativeLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ll_create_container"
+        android:background="@drawable/green_bg_num_big"
+        android:orientation="vertical"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        >
+
+        <TextView
+            android:id="@+id/tv_clear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:padding="10dp"
+            android:text="清除全部数据"
+            android:textColor="@android:color/holo_red_dark" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rcv_number_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
 

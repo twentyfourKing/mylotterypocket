@@ -3,12 +3,9 @@ package follow.twentyfourking.mylotterypocket.view.fragment;
 import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
-import android.animation.PropertyValuesHolder;
 import android.animation.ValueAnimator;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,9 +30,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import follow.twentyfourking.mylotterypocket.R;
+import follow.twentyfourking.mylotterypocket.view.adapter.NumberListAdapter;
 import follow.twentyfourking.mylotterypocket.view.adapter.NumberShowAdapter;
 
-public class SevenLotteryFragment extends Fragment {
+public class SevenLotteryFragment extends Fragment implements NumberListAdapter.IAdapterCallback {
     @BindView(R.id.tv_marquee)
     MarqueeView mMarquee;
     @BindView(R.id.tv_create_state)
@@ -50,13 +48,26 @@ public class SevenLotteryFragment extends Fragment {
     TextView mTvArrow;
     @BindView(R.id.ll_choose_container)
     LinearLayout mLlChooseContainer;
-    TranslateAnimation translateAnimation;
+    @BindView(R.id.ll_list)
+    LinearLayout mLlListContainer;
+    @BindView(R.id.rcv_number_list)
+    RecyclerView mRecyclerViewList;
+
+    private TranslateAnimation mTranslateAnimation;
 
 
     private Context mContext;
     private NumberShowAdapter mNumAdapter;
+    private NumberListAdapter mListAdapter;
     private int mCurrentPosition = 0;
     private List<String> mInitData;
+    private int lastTransitionX;
+    private int lastTransitionY;
+    int[] locationFrom = new int[2];
+    private float origX = 0.0f;
+    private float origY = 0.0f;
+
+    private List<List<String>> mNumberData;
 
     public static Fragment newInstance() {
         SevenLotteryFragment fragment = new SevenLotteryFragment();
@@ -92,29 +103,44 @@ public class SevenLotteryFragment extends Fragment {
         int id = view.getId();
         if (id == R.id.tv_create_state) {
             mTvCreateNub.setEnabled(false);
+            mNumAdapter.setData(createData());
             startChooseNumber(mCurrentPosition);
         } else if (id == R.id.tv_save) {
             hideChoose();
+            mTvCreateNub.setEnabled(true);
+            mTvCreateNub.setText("开始");
+            List<String> data = new ArrayList<>();
+            for (String str : mNumAdapter.getData()) {
+                data.add(str);
+            }
+            mNumberData.add(data);
+            mListAdapter.setData(mNumberData);
+            if (mLlListContainer.getVisibility() == View.GONE
+                    && mNumberData != null && mNumberData.size() > 0) {
+                mLlListContainer.setVisibility(View.VISIBLE);
+            }
         } else if (id == R.id.no_save) {
             hideChoose();
+            mTvCreateNub.setEnabled(true);
+            mTvCreateNub.setText("开始");
         }
     }
 
     private void showChoose() {
-        translateAnimation = new TranslateAnimation(0,100,0,0);
-        translateAnimation.setDuration(100);
-        translateAnimation.setInterpolator(new AccelerateInterpolator());
-        translateAnimation.setRepeatCount(-1);
-        translateAnimation.setRepeatMode(ValueAnimator.REVERSE);
-        translateAnimation.start();
-        mTvArrow.setAnimation(translateAnimation);
+        mTranslateAnimation = new TranslateAnimation(0, 200, 0, 0);
+        mTranslateAnimation.setDuration(200);
+        mTranslateAnimation.setInterpolator(new AccelerateInterpolator());
+        mTranslateAnimation.setRepeatCount(-1);
+        mTranslateAnimation.setRepeatMode(ValueAnimator.REVERSE);
+        mTranslateAnimation.start();
+        mTvArrow.setAnimation(mTranslateAnimation);
         mTvArrow.setVisibility(View.VISIBLE);
         mLlChooseContainer.setVisibility(View.VISIBLE);
     }
 
     private void hideChoose() {
-        if (translateAnimation != null) {
-            translateAnimation.cancel();
+        if (mTranslateAnimation != null) {
+            mTranslateAnimation.cancel();
         }
         mTvArrow.setVisibility(View.GONE);
         mLlChooseContainer.setVisibility(View.GONE);
@@ -137,15 +163,23 @@ public class SevenLotteryFragment extends Fragment {
         mTvNm.setVisibility(View.GONE);
         mTvTitle.setVisibility(View.GONE);
 
+
+        mNumberData = new ArrayList<>();
+        mListAdapter = new NumberListAdapter(this);
+        LinearLayoutManager manager1 = new LinearLayoutManager(mContext);
+        manager1.setOrientation(LinearLayoutManager.VERTICAL);
+        mRecyclerViewList.setLayoutManager(manager1);
+        mRecyclerViewList.setAdapter(mListAdapter);
+        mLlListContainer.setVisibility(View.GONE);
     }
 
     private int number;
 
     public void startChooseNumber(int position) {
         if (position > 6) {
-            mTvCreateNub.setEnabled(true);
             mTvCreateNub.setText("完成");
             mTvTitle.setVisibility(View.GONE);
+            mCurrentPosition = 0;
             showChoose();
             return;
         }
@@ -182,12 +216,6 @@ public class SevenLotteryFragment extends Fragment {
         thread.start();
     }
 
-    private int lastTransitionX;
-    private int lastTransitionY;
-    int[] locationFrom = new int[2];
-    private float origX = 0.0f;
-    private float origY = 0.0f;
-
     private void startAnimation(final View fromView, final View toView) {
         if (origX == 0.0f) {
             origX = fromView.getX();
@@ -214,7 +242,7 @@ public class SevenLotteryFragment extends Fragment {
         ObjectAnimator animator2 = ObjectAnimator.ofFloat(fromView,
                 "translationY", -lastTransitionY);
         AnimatorSet animatorSet = new AnimatorSet();
-        animatorSet.setDuration(1000);
+        animatorSet.setDuration(2000);
         animatorSet.playTogether(animator1, animator2);
 
         animatorSet.addListener(new Animator.AnimatorListener() {
@@ -246,6 +274,7 @@ public class SevenLotteryFragment extends Fragment {
     }
 
     private List<String> createData() {
+        mInitData.clear();
         mInitData.add("?");
         mInitData.add("?");
         mInitData.add("?");
@@ -276,5 +305,10 @@ public class SevenLotteryFragment extends Fragment {
         mInitData.set(position, String.valueOf(value));
         mNumAdapter.updateItem(mInitData, position);
         startChooseNumber(mCurrentPosition);
+    }
+
+    @Override
+    public void setVisibility() {
+        mLlListContainer.setVisibility(View.GONE);
     }
 }
