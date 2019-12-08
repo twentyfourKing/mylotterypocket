@@ -9,14 +9,60 @@
         android:id="@+id/tv_create_state"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="20dp"
         android:layout_marginTop="10dp"
         android:layout_marginRight="5dp"
         android:layout_marginBottom="5dp"
         android:background="@drawable/start_bg"
-        android:padding="5dp"
-        android:text="开始随机"
-        android:textColor="@android:color/white" />
+        android:paddingLeft="10dp"
+        android:paddingTop="5dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="5dp"
+        android:text="开始"
+        android:textColor="@android:color/black" />
+
+    <TextView
+        android:id="@+id/tv_arrow"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_toRightOf="@+id/tv_create_state"
+        android:text="---->"
+        android:textColor="@android:color/holo_red_dark"
+        android:textSize="20sp"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:id="@+id/ll_choose_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/choose_bg"
+        android:orientation="horizontal"
+        android:padding="10dp"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/tv_save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/holo_red_dark"
+            android:text="保存"
+            android:textColor="@android:color/white" />
+
+        <TextView
+            android:id="@+id/no_save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:background="@android:color/black"
+            android:text="不保存"
+            android:textColor="@android:color/white" />
+
+    </LinearLayout>
 
 
     <LinearLayout
@@ -31,10 +77,11 @@
             android:layout_marginTop="10dp"
             android:background="#7FFFAA">
 
-            <LinearLayout
+            <RelativeLayout
                 android:id="@+id/ll_number_list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
                 android:background="#B0C4DE"
                 android:padding="10dp">
@@ -43,10 +90,10 @@
                     android:id="@+id/rcv_seven_num"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/tv_create_state"
+                    android:layout_centerHorizontal="true"
                     android:layout_gravity="center"
                     android:background="#B0C4DE" />
-            </LinearLayout>
+            </RelativeLayout>
 
             <TextView
                 android:id="@+id/tv_title"
