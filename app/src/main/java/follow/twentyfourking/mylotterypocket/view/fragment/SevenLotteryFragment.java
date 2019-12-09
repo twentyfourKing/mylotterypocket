@@ -17,6 +17,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -32,6 +33,7 @@ import butterknife.OnClick;
 import follow.twentyfourking.mylotterypocket.R;
 import follow.twentyfourking.mylotterypocket.view.adapter.NumberListAdapter;
 import follow.twentyfourking.mylotterypocket.view.adapter.NumberShowAdapter;
+import follow.twentyfourking.mylotterypocket.viewmodel.data.SevenNumberListItemBean;
 
 public class SevenLotteryFragment extends Fragment implements NumberListAdapter.IAdapterCallback {
     @BindView(R.id.tv_marquee)
@@ -53,9 +55,10 @@ public class SevenLotteryFragment extends Fragment implements NumberListAdapter.
     @BindView(R.id.rcv_number_list)
     RecyclerView mRecyclerViewList;
 
+    public static int CREATE_NUMBER_TIME = 200;//计算号码时间
+    public static int TRANSITION_NUMBER_TIME = 200;//号码动画时间
+
     private TranslateAnimation mTranslateAnimation;
-
-
     private Context mContext;
     private NumberShowAdapter mNumAdapter;
     private NumberListAdapter mListAdapter;
@@ -67,7 +70,7 @@ public class SevenLotteryFragment extends Fragment implements NumberListAdapter.
     private float origX = 0.0f;
     private float origY = 0.0f;
 
-    private List<List<String>> mNumberData;
+    private List<SevenNumberListItemBean> mNumberData;
 
     public static Fragment newInstance() {
         SevenLotteryFragment fragment = new SevenLotteryFragment();
@@ -98,7 +101,9 @@ public class SevenLotteryFragment extends Fragment implements NumberListAdapter.
     @OnClick({
             R.id.tv_create_state,
             R.id.tv_save,
-            R.id.no_save})
+            R.id.no_save,
+            R.id.tv_clear
+    })
     public void onClick(View view) {
         int id = view.getId();
         if (id == R.id.tv_create_state) {
@@ -113,7 +118,10 @@ public class SevenLotteryFragment extends Fragment implements NumberListAdapter.
             for (String str : mNumAdapter.getData()) {
                 data.add(str);
             }
-            mNumberData.add(data);
+            SevenNumberListItemBean bean = new SevenNumberListItemBean();
+            bean.setmNumberData(data);
+            bean.setChooseState(false);
+            mNumberData.add(bean);
             mListAdapter.setData(mNumberData);
             if (mLlListContainer.getVisibility() == View.GONE
                     && mNumberData != null && mNumberData.size() > 0) {
@@ -123,6 +131,8 @@ public class SevenLotteryFragment extends Fragment implements NumberListAdapter.
             hideChoose();
             mTvCreateNub.setEnabled(true);
             mTvCreateNub.setText("开始");
+        }else if(id == R.id.tv_clear){
+            mListAdapter.clearData();
         }
     }
 
@@ -168,6 +178,10 @@ public class SevenLotteryFragment extends Fragment implements NumberListAdapter.
         mListAdapter = new NumberListAdapter(this);
         LinearLayoutManager manager1 = new LinearLayoutManager(mContext);
         manager1.setOrientation(LinearLayoutManager.VERTICAL);
+        DividerItemDecoration divider = new DividerItemDecoration(mRecyclerViewList.getContext(),
+                manager1.getOrientation());
+        divider.setDrawable(mContext.getResources().getDrawable(R.color.colorPrimaryDark));
+        mRecyclerViewList.addItemDecoration(divider);
         mRecyclerViewList.setLayoutManager(manager1);
         mRecyclerViewList.setAdapter(mListAdapter);
         mLlListContainer.setVisibility(View.GONE);
@@ -197,7 +211,7 @@ public class SevenLotteryFragment extends Fragment implements NumberListAdapter.
             @Override
             public void run() {
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(CREATE_NUMBER_TIME);
                     Random random = new Random();
                     number = random.nextInt(10);
                     getActivity().runOnUiThread(new Runnable() {
@@ -242,7 +256,7 @@ public class SevenLotteryFragment extends Fragment implements NumberListAdapter.
         ObjectAnimator animator2 = ObjectAnimator.ofFloat(fromView,
                 "translationY", -lastTransitionY);
         AnimatorSet animatorSet = new AnimatorSet();
-        animatorSet.setDuration(2000);
+        animatorSet.setDuration(TRANSITION_NUMBER_TIME);
         animatorSet.playTogether(animator1, animator2);
 
         animatorSet.addListener(new Animator.AnimatorListener() {

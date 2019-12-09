@@ -1,84 +1,152 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_list_number_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="10dp">
+    android:layout_marginTop="5dp"
+    android:layout_marginBottom="5dp"
+    android:padding="5dp">
 
-    <TextView
-        android:id="@+id/tv_number1"
-        android:layout_width="wrap_content"
+<FrameLayout
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@drawable/number_bg_red"
-        android:gravity="center"
-        android:textColor="@android:color/black" />
+        android:layout_gravity="center"
+        android:layout_weight="1">
 
-    <TextView
-        android:id="@+id/tv_number2"
-        android:layout_width="wrap_content"
+        <TextView
+            android:id="@+id/tv_number1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/number_bg_red"
+            android:gravity="center"
+            android:textColor="@android:color/black" />
+    </FrameLayout>
+
+
+    <FrameLayout
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:background="@drawable/number_bg_red"
-        android:gravity="center"
-        android:textColor="@android:color/black" />
+        android:layout_gravity="center"
+        android:layout_weight="1">
 
-    <TextView
-        android:id="@+id/tv_number3"
-        android:layout_width="wrap_content"
+        <TextView
+            android:id="@+id/tv_number2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/number_bg_red"
+            android:gravity="center"
+            android:textColor="@android:color/black" />
+    </FrameLayout>
+
+
+    <FrameLayout
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:background="@drawable/number_bg_red"
-        android:gravity="center"
-        android:textColor="@android:color/black" />
+        android:layout_gravity="center"
+        android:layout_weight="1">
 
-    <TextView
-        android:id="@+id/tv_number4"
-        android:layout_width="wrap_content"
+        <TextView
+            android:id="@+id/tv_number3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/number_bg_red"
+            android:gravity="center"
+            android:textColor="@android:color/black" />
+    </FrameLayout>
+
+
+    <FrameLayout
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:background="@drawable/number_bg_red"
-        android:gravity="center"
-        android:textColor="@android:color/black" />
+        android:layout_gravity="center"
+        android:layout_weight="1">
 
-    <TextView
-        android:id="@+id/tv_number5"
-        android:layout_width="wrap_content"
+        <TextView
+            android:id="@+id/tv_number4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/number_bg_red"
+            android:gravity="center"
+            android:textColor="@android:color/black" />
+    </FrameLayout>
+
+
+    <FrameLayout
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:background="@drawable/number_bg_red"
-        android:gravity="center"
-        android:textColor="@android:color/black" />
+        android:layout_gravity="center"
+        android:layout_weight="1">
 
-    <TextView
-        android:id="@+id/tv_number6"
-        android:layout_width="wrap_content"
+        <TextView
+            android:id="@+id/tv_number5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/number_bg_red"
+            android:gravity="center"
+            android:textColor="@android:color/black" />
+    </FrameLayout>
+
+
+    <FrameLayout
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:background="@drawable/number_bg_red"
-        android:gravity="center"
-        android:textColor="@android:color/black" />
+        android:layout_gravity="center"
+        android:layout_weight="1">
 
-    <TextView
-        android:id="@+id/tv_number7"
-        android:layout_width="wrap_content"
+        <TextView
+            android:id="@+id/tv_number6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/number_bg_red"
+            android:gravity="center"
+            android:textColor="@android:color/black" />
+    </FrameLayout>
+
+
+    <FrameLayout
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:background="@drawable/number_bg_red"
-        android:gravity="center"
-        android:textColor="@android:color/black" />
+        android:layout_gravity="center"
+        android:layout_weight="1">
 
-    <ImageView
-        android:id="@+id/img_delete"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginLeft="20dp"
-        android:src="@drawable/icon_delete" />
-    <ImageView
-        android:id="@+id/img_bug"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginLeft="20dp"
-        android:src="@drawable/icon_bug" />
+        <TextView
+            android:id="@+id/tv_number7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/number_bg_red"
+            android:gravity="center"
+            android:textColor="@android:color/black" />
+    </FrameLayout>
+
+
+    <FrameLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_weight="1">
+
+        <ImageView
+            android:id="@+id/img_delete"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+
+            android:src="@drawable/icon_delete" />
+    </FrameLayout>
+
+
+    <FrameLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_weight="1">
+
+        <ImageView
+            android:id="@+id/img_bug"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:src="@drawable/icon_bug" />
+    </FrameLayout>
 
 
 </LinearLayout>

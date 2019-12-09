@@ -52,5 +52,6 @@ dependencies {
     annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.0'
 
     implementation 'com.github.385841539:MarqueeView:1.0.0'
+    implementation 'com.blankj:utilcodex:1.26.0'
 
 }
