@@ -133,6 +133,7 @@ public class SevenLotteryFragment extends Fragment implements NumberListAdapter.
             mTvCreateNub.setText("开始");
         }else if(id == R.id.tv_clear){
             mListAdapter.clearData();
+            mNumAdapter.setData(createData());
         }
     }
 
@@ -175,7 +176,7 @@ public class SevenLotteryFragment extends Fragment implements NumberListAdapter.
 
 
         mNumberData = new ArrayList<>();
-        mListAdapter = new NumberListAdapter(this);
+        mListAdapter = new NumberListAdapter(this, 0);
         LinearLayoutManager manager1 = new LinearLayoutManager(mContext);
         manager1.setOrientation(LinearLayoutManager.VERTICAL);
         DividerItemDecoration divider = new DividerItemDecoration(mRecyclerViewList.getContext(),

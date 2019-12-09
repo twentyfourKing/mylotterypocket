@@ -3,21 +3,14 @@ package follow.twentyfourking.mylotterypocket.view.fragment;
 import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
-import android.animation.PropertyValuesHolder;
-import android.animation.ValueAnimator;
-import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
-import android.view.animation.AnimationSet;
-import android.view.animation.AnimationUtils;
-import android.view.animation.RotateAnimation;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -39,8 +32,6 @@ import follow.twentyfourking.mylotterypocket.R;
 import follow.twentyfourking.mylotterypocket.view.adapter.NumberListAdapter;
 import follow.twentyfourking.mylotterypocket.view.widget.ChooseDialog;
 import follow.twentyfourking.mylotterypocket.viewmodel.data.SevenNumberListItemBean;
-
-import static android.view.animation.Animation.REVERSE;
 
 public class DoubleLotteryFragment extends Fragment implements ChooseDialog.IChooseDialogCallback,
         NumberListAdapter.IAdapterCallback {
@@ -71,14 +62,6 @@ public class DoubleLotteryFragment extends Fragment implements ChooseDialog.ICho
 
 
     private Context mContext;
-    private String mBallNumber1;
-    private String mBallNumber2;
-    private String mBallNumber3;
-    private String mBallNumber4;
-    private String mBallNumber5;
-    private String mBallNumber6;
-    private String mBallNumber7;
-
     private int mCurrentPosition = 0;
     private List<String> mBallNumData;
     private ObjectAnimator mWaitingView;
@@ -86,6 +69,7 @@ public class DoubleLotteryFragment extends Fragment implements ChooseDialog.ICho
 
     private NumberListAdapter mAdapter;
     private List<SevenNumberListItemBean> mData;
+    private Random mRandom ;
 
     public static Fragment newInstance() {
         DoubleLotteryFragment fragment = new DoubleLotteryFragment();
@@ -120,8 +104,10 @@ public class DoubleLotteryFragment extends Fragment implements ChooseDialog.ICho
     public void onClick(View view) {
         int id = view.getId();
         if (id == R.id.tv_clear) {
-
+            mAdapter.clearData();
+            setInitValue();
         } else if (id == R.id.tv_create) {
+            setInitValue();
             mTvCreate.setEnabled(false);
             mTvCreate.setAlpha(0.3f);
             createBallNumber(mCurrentPosition);
@@ -131,7 +117,7 @@ public class DoubleLotteryFragment extends Fragment implements ChooseDialog.ICho
     private void initView() {
         initData();
 
-        mAdapter = new NumberListAdapter(this);
+        mAdapter = new NumberListAdapter(this, 1);
         LinearLayoutManager manager = new LinearLayoutManager(mContext);
         manager.setOrientation(LinearLayoutManager.VERTICAL);
         DividerItemDecoration itemDecoration = new DividerItemDecoration(mRecyclerViewBallList.getContext(),
@@ -145,20 +131,9 @@ public class DoubleLotteryFragment extends Fragment implements ChooseDialog.ICho
 
     private void initData() {
         mData = new ArrayList<>();
-        mBallNumber1 = "?";
-        mBallNumber2 = "?";
-        mBallNumber3 = "?";
-        mBallNumber4 = "?";
-        mBallNumber5 = "?";
-        mBallNumber6 = "?";
-        mBallNumber7 = "?";
-        mTvBall1.setText(mBallNumber1);
-        mTvBall2.setText(mBallNumber2);
-        mTvBall3.setText(mBallNumber3);
-        mTvBall4.setText(mBallNumber4);
-        mTvBall5.setText(mBallNumber5);
-        mTvBall6.setText(mBallNumber6);
-        mTvBall7.setText(mBallNumber7);
+        mRandom = new Random();
+
+        setInitValue();
         mAllBallView.put(0, mTvBall1);
         mAllBallView.put(1, mTvBall2);
         mAllBallView.put(2, mTvBall3);
@@ -166,6 +141,16 @@ public class DoubleLotteryFragment extends Fragment implements ChooseDialog.ICho
         mAllBallView.put(4, mTvBall5);
         mAllBallView.put(5, mTvBall6);
         mAllBallView.put(6, mTvBall7);
+    }
+
+    private void setInitValue(){
+        mTvBall1.setText("?");
+        mTvBall2.setText("?");
+        mTvBall3.setText("?");
+        mTvBall4.setText("?");
+        mTvBall5.setText("?");
+        mTvBall6.setText("?");
+        mTvBall7.setText("?");
     }
 
     private void startAnimation(int position) {
@@ -248,8 +233,16 @@ public class DoubleLotteryFragment extends Fragment implements ChooseDialog.ICho
     }
 
     private int createRandomValue() {
-        Random random = new Random();
-        int number = random.nextInt(33);
+        int number;
+        if (mCurrentPosition == 6) {
+            number = mRandom.nextInt(17);
+
+        } else {
+            number = mRandom.nextInt(34);
+        }
+        if (number == 0) {
+            return createRandomValue();
+        }
         boolean have = false;
         if (mBallNumData != null && mBallNumData.size() > 0) {
             for (String str : mBallNumData) {
@@ -274,10 +267,15 @@ public class DoubleLotteryFragment extends Fragment implements ChooseDialog.ICho
     @Override
     public void onSatisfaction() {
         SevenNumberListItemBean bean = new SevenNumberListItemBean();
-        bean.setmNumberData(mBallNumData);
+        List<String> data = new ArrayList<>();
+        for(String str : mBallNumData){
+            data.add(str);
+        }
+        bean.setmNumberData(data);
         bean.setChooseState(false);
         mData.add(bean);
         mAdapter.setData(mData);
+        mBallNumData.clear();
         if (mDataListContainer.getVisibility() == View.GONE) {
             mDataListContainer.setVisibility(View.VISIBLE);
         }

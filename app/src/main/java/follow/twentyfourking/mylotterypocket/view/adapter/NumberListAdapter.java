@@ -3,7 +3,6 @@ package follow.twentyfourking.mylotterypocket.view.adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -17,11 +16,13 @@ import follow.twentyfourking.mylotterypocket.R;
 import follow.twentyfourking.mylotterypocket.viewmodel.data.SevenNumberListItemBean;
 
 public class NumberListAdapter extends RecyclerView.Adapter<NumberListAdapter.SaveViewHolder> {
+    private int mType;// 0 七星彩 , 1 双色球
     private List<SevenNumberListItemBean> mData;
     private IAdapterCallback mCallback;
 
-    public NumberListAdapter(IAdapterCallback callback) {
-        mCallback = callback;
+    public NumberListAdapter(IAdapterCallback callback, int type) {
+        this.mType = type;
+        this.mCallback = callback;
     }
 
     @NonNull
@@ -42,6 +43,24 @@ public class NumberListAdapter extends RecyclerView.Adapter<NumberListAdapter.Sa
         holder.tvNum5.setText(str.get(4));
         holder.tvNum6.setText(str.get(5));
         holder.tvNum7.setText(str.get(6));
+
+        if (mType == 1) {
+            holder.tvNum7.setBackgroundResource(R.drawable.number_bg_blue);
+            holder.tvNum6.setBackgroundResource(R.drawable.number_bg_red);
+            holder.tvNum5.setBackgroundResource(R.drawable.number_bg_red);
+            holder.tvNum4.setBackgroundResource(R.drawable.number_bg_red);
+            holder.tvNum3.setBackgroundResource(R.drawable.number_bg_red);
+            holder.tvNum2.setBackgroundResource(R.drawable.number_bg_red);
+            holder.tvNum1.setBackgroundResource(R.drawable.number_bg_red);
+        } else {
+            holder.tvNum7.setBackgroundResource(R.drawable.number_bg_red);
+            holder.tvNum6.setBackgroundResource(R.drawable.number_bg_red);
+            holder.tvNum5.setBackgroundResource(R.drawable.number_bg_red);
+            holder.tvNum4.setBackgroundResource(R.drawable.number_bg_red);
+            holder.tvNum3.setBackgroundResource(R.drawable.number_bg_red);
+            holder.tvNum2.setBackgroundResource(R.drawable.number_bg_red);
+            holder.tvNum1.setBackgroundResource(R.drawable.number_bg_red);
+        }
 
         if (mData.get(position).isChooseState()) {
             holder.imgBug.setEnabled(false);
