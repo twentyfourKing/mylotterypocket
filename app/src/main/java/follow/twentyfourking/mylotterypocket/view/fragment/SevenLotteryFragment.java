@@ -33,6 +33,7 @@ import butterknife.OnClick;
 import follow.twentyfourking.mylotterypocket.R;
 import follow.twentyfourking.mylotterypocket.view.adapter.NumberListAdapter;
 import follow.twentyfourking.mylotterypocket.view.adapter.NumberShowAdapter;
+import follow.twentyfourking.mylotterypocket.view.delegate.IFragmentCallback;
 import follow.twentyfourking.mylotterypocket.viewmodel.data.SevenNumberListItemBean;
 
 public class SevenLotteryFragment extends Fragment implements NumberListAdapter.IAdapterCallback {
@@ -72,7 +73,7 @@ public class SevenLotteryFragment extends Fragment implements NumberListAdapter.
 
     private List<SevenNumberListItemBean> mNumberData;
 
-    public static Fragment newInstance() {
+    public static Fragment newInstance(IFragmentCallback callback) {
         SevenLotteryFragment fragment = new SevenLotteryFragment();
         return fragment;
     }

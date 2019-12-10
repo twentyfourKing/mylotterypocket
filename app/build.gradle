@@ -11,6 +11,11 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
+            }
+        }
     }
     buildTypes {
         release {
@@ -53,5 +58,7 @@ dependencies {
 
     implementation 'com.github.385841539:MarqueeView:1.0.0'
     implementation 'com.blankj:utilcodex:1.26.0'
+
+    implementation 'com.contrarywind:Android-PickerView:4.1.9'
 
 }

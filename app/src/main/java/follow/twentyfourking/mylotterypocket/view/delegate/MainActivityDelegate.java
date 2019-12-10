@@ -19,19 +19,21 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import follow.twentyfourking.mylotterypocket.R;
+import follow.twentyfourking.mylotterypocket.model.AppExecutor;
 import follow.twentyfourking.mylotterypocket.model.repo.MainRepository;
 import follow.twentyfourking.mylotterypocket.view.activity.MainActivity;
 import follow.twentyfourking.mylotterypocket.view.adapter.MainPagerAdapter;
 import follow.twentyfourking.mylotterypocket.view.fragment.DoubleLotteryFragment;
 import follow.twentyfourking.mylotterypocket.view.fragment.HistoryFragment;
 import follow.twentyfourking.mylotterypocket.view.fragment.SevenLotteryFragment;
+import follow.twentyfourking.mylotterypocket.viewmodel.db.LotteryDatabase;
 import follow.twentyfourking.mylotterypocket.viewmodel.factory.MainFactory;
 import follow.twentyfourking.mylotterypocket.viewmodel.viewmodel.MainViewModel;
 
 /**
  * activity_main.xml
  */
-public class MainActivityDelegate {
+public class MainActivityDelegate implements IFragmentCallback<MainRepository> {
     @BindView(R.id.tab_main)
     TabLayout mTabLayout;
     @BindView(R.id.vp_main)
@@ -42,9 +44,15 @@ public class MainActivityDelegate {
     private MainViewModel mViewModel;
     private MainRepository mMainRepository;
     private MainPagerAdapter mAdapter;
+    private LotteryDatabase mDatabase;
 
     public MainActivityDelegate() {
 
+    }
+
+    @Override
+    public MainRepository onGetRepository() {
+        return mMainRepository;
     }
 
     public void setDelegateInit(MainActivity mainActivity, View view) {
@@ -99,9 +107,9 @@ public class MainActivityDelegate {
 
     private void setViewPager() {
         List<Fragment> fragments = new ArrayList<>();
-        fragments.add(SevenLotteryFragment.newInstance());
+        fragments.add(SevenLotteryFragment.newInstance(this));
         fragments.add(DoubleLotteryFragment.newInstance());
-        fragments.add(HistoryFragment.newInstance());
+        fragments.add(HistoryFragment.newInstance(this));
         mAdapter = new MainPagerAdapter(mActivity.getSupportFragmentManager(),
                 FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT, fragments);
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -128,7 +136,10 @@ public class MainActivityDelegate {
         ViewModelStore store = mActivity.getViewModelStore();
         ViewModelProvider provider = new ViewModelProvider(store, factory);
         mViewModel = provider.get(MainViewModel.class);
-        mMainRepository = new MainRepository(mViewModel);
+
+        AppExecutor appExecutor = new AppExecutor();
+
+        mMainRepository = new MainRepository(mViewModel, appExecutor, mDatabase);
 
     }
 
