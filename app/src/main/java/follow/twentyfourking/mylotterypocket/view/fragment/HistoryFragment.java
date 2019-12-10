@@ -19,6 +19,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStore;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.OnTimeSelectChangeListener;
@@ -28,13 +34,18 @@ import com.blankj.utilcode.util.ToastUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import follow.twentyfourking.mylotterypocket.R;
 import follow.twentyfourking.mylotterypocket.model.repo.MainRepository;
+import follow.twentyfourking.mylotterypocket.view.adapter.HistoryAdapter;
 import follow.twentyfourking.mylotterypocket.view.delegate.IFragmentCallback;
+import follow.twentyfourking.mylotterypocket.viewmodel.db.LotteryEntity;
+import follow.twentyfourking.mylotterypocket.viewmodel.factory.MainFactory;
+import follow.twentyfourking.mylotterypocket.viewmodel.viewmodel.MainViewModel;
 
 public class HistoryFragment extends Fragment {
     @BindView(R.id.tv_choose_time)
@@ -43,6 +54,8 @@ public class HistoryFragment extends Fragment {
     CheckBox mCbQi;
     @BindView(R.id.cb_shuangseqiu)
     CheckBox mCbShuang;
+    @BindView(R.id.rcv_history_list)
+    RecyclerView mRecyclerView;
 
     private Context mContext;
     private TimePickerView mTimePicker;
@@ -50,6 +63,8 @@ public class HistoryFragment extends Fragment {
 
     private String mTimeStr;
     private String mType;
+    private HistoryAdapter mAdapter;
+    private MainViewModel mViewModel;
 
     public static Fragment newInstance(IFragmentCallback callback) {
         HistoryFragment fragment = new HistoryFragment();
@@ -64,6 +79,11 @@ public class HistoryFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ViewModelProvider.Factory factory = new MainFactory();
+        ViewModelStore store = getActivity().getViewModelStore();
+        ViewModelProvider provider = new ViewModelProvider(store, factory);
+        mViewModel = provider.get(MainViewModel.class);
+        setObserver();
     }
 
     @Override
@@ -79,6 +99,25 @@ public class HistoryFragment extends Fragment {
         ButterKnife.bind(this, view);
         initView();
         return view;
+    }
+
+    private void setObserver() {
+        mViewModel.getLotteryDataLive().observe(getActivity(), new Observer<List<LotteryEntity>>() {
+            @Override
+            public void onChanged(List<LotteryEntity> lotteryEntities) {
+                if (lotteryEntities != null) {
+                    mAdapter.setData(lotteryEntities);
+                }
+            }
+        });
+        mViewModel.getLotteryDataLiveAll().observe(getActivity(), new Observer<List<LotteryEntity>>() {
+            @Override
+            public void onChanged(List<LotteryEntity> lotteryEntities) {
+                if (lotteryEntities != null) {
+                    mAdapter.setData(lotteryEntities);
+                }
+            }
+        });
     }
 
     @OnClick({
@@ -163,6 +202,17 @@ public class HistoryFragment extends Fragment {
         mTimeStr = getTime(System.currentTimeMillis());
         mTvTime.setText(mTimeStr);
 
+        initCheckView();
+        initTimePicker();
+        initRecyclerView();
+
+        if (mCallback.onGetRepository() instanceof MainRepository) {
+            ((MainRepository) mCallback.onGetRepository()).getLotteryAll();
+        }
+
+    }
+
+    private void initCheckView() {
         mCbShuang.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -179,7 +229,18 @@ public class HistoryFragment extends Fragment {
                 }
             }
         });
-        initTimePicker();
+    }
+
+    private void initRecyclerView() {
+        mAdapter = new HistoryAdapter();
+        LinearLayoutManager manager = new LinearLayoutManager(getActivity());
+        manager.setOrientation(LinearLayoutManager.VERTICAL);
+        DividerItemDecoration itemDecoration = new DividerItemDecoration(mRecyclerView.getContext(),
+                manager.getOrientation());
+        itemDecoration.setDrawable(getActivity().getResources().getDrawable(R.color.colorPrimaryDark));
+        mRecyclerView.addItemDecoration(itemDecoration);
+        mRecyclerView.setLayoutManager(manager);
+        mRecyclerView.setAdapter(mAdapter);
     }
 
     private void initTimePicker() {

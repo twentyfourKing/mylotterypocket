@@ -14,6 +14,7 @@ import java.util.List;
 
 import follow.twentyfourking.mylotterypocket.R;
 import follow.twentyfourking.mylotterypocket.viewmodel.data.SevenNumberListItemBean;
+import follow.twentyfourking.mylotterypocket.viewmodel.db.LotteryEntity;
 
 public class NumberListAdapter extends RecyclerView.Adapter<NumberListAdapter.SaveViewHolder> {
     private int mType;// 0 七星彩 , 1 双色球
@@ -90,6 +91,20 @@ public class NumberListAdapter extends RecyclerView.Adapter<NumberListAdapter.Sa
                 holder.imgBug.setAlpha(0.2f);
                 holder.parent.setBackgroundResource(R.color.LightGoldenrodYellow);
 
+                LotteryEntity entity = new LotteryEntity();
+                List<String> numberList = mData.get(position).getmNumberData();
+                String numberStr = "";
+                for (String str : numberList) {
+                    numberStr += str;
+                }
+                entity.setNumber(numberStr);
+                if (mType == 0) {
+                    entity.setType("qixingcai");
+                } else {
+                    entity.setType("shuangseqiu");
+                }
+                entity.setTime(System.currentTimeMillis());
+                mCallback.saveLottery(entity);
                 notifyItemChanged(position);
             }
         });
@@ -143,5 +158,7 @@ public class NumberListAdapter extends RecyclerView.Adapter<NumberListAdapter.Sa
 
     public interface IAdapterCallback {
         void setVisibility();
+
+        void saveLottery(LotteryEntity entity);
     }
 }

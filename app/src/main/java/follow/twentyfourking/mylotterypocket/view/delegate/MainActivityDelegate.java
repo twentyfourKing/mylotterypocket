@@ -27,6 +27,7 @@ import follow.twentyfourking.mylotterypocket.view.fragment.DoubleLotteryFragment
 import follow.twentyfourking.mylotterypocket.view.fragment.HistoryFragment;
 import follow.twentyfourking.mylotterypocket.view.fragment.SevenLotteryFragment;
 import follow.twentyfourking.mylotterypocket.viewmodel.db.LotteryDatabase;
+import follow.twentyfourking.mylotterypocket.viewmodel.db.LotteryEntity;
 import follow.twentyfourking.mylotterypocket.viewmodel.factory.MainFactory;
 import follow.twentyfourking.mylotterypocket.viewmodel.viewmodel.MainViewModel;
 
@@ -108,7 +109,7 @@ public class MainActivityDelegate implements IFragmentCallback<MainRepository> {
     private void setViewPager() {
         List<Fragment> fragments = new ArrayList<>();
         fragments.add(SevenLotteryFragment.newInstance(this));
-        fragments.add(DoubleLotteryFragment.newInstance());
+        fragments.add(DoubleLotteryFragment.newInstance(this));
         fragments.add(HistoryFragment.newInstance(this));
         mAdapter = new MainPagerAdapter(mActivity.getSupportFragmentManager(),
                 FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT, fragments);
@@ -138,6 +139,7 @@ public class MainActivityDelegate implements IFragmentCallback<MainRepository> {
         mViewModel = provider.get(MainViewModel.class);
 
         AppExecutor appExecutor = new AppExecutor();
+        mDatabase = LotteryDatabase.getInstance(mActivity.getApplicationContext());
 
         mMainRepository = new MainRepository(mViewModel, appExecutor, mDatabase);
 

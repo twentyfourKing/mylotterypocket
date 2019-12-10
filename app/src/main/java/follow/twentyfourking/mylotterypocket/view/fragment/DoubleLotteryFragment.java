@@ -29,9 +29,12 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import follow.twentyfourking.mylotterypocket.R;
+import follow.twentyfourking.mylotterypocket.model.repo.MainRepository;
 import follow.twentyfourking.mylotterypocket.view.adapter.NumberListAdapter;
+import follow.twentyfourking.mylotterypocket.view.delegate.IFragmentCallback;
 import follow.twentyfourking.mylotterypocket.view.widget.ChooseDialog;
 import follow.twentyfourking.mylotterypocket.viewmodel.data.SevenNumberListItemBean;
+import follow.twentyfourking.mylotterypocket.viewmodel.db.LotteryEntity;
 
 public class DoubleLotteryFragment extends Fragment implements ChooseDialog.IChooseDialogCallback,
         NumberListAdapter.IAdapterCallback {
@@ -70,10 +73,16 @@ public class DoubleLotteryFragment extends Fragment implements ChooseDialog.ICho
     private NumberListAdapter mAdapter;
     private List<SevenNumberListItemBean> mData;
     private Random mRandom ;
+    private IFragmentCallback mCallback;
 
-    public static Fragment newInstance() {
+    public static Fragment newInstance(IFragmentCallback callback) {
         DoubleLotteryFragment fragment = new DoubleLotteryFragment();
+        fragment.setCallback(callback);
         return fragment;
+    }
+
+    private void setCallback(IFragmentCallback callback) {
+        this.mCallback = callback;
     }
 
     @Override
@@ -284,5 +293,12 @@ public class DoubleLotteryFragment extends Fragment implements ChooseDialog.ICho
     @Override
     public void setVisibility() {
         mDataListContainer.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void saveLottery(LotteryEntity entity) {
+        if(mCallback.onGetRepository() instanceof MainRepository){
+            ((MainRepository) mCallback.onGetRepository()).saveLotteryNumber(entity);
+        }
     }
 }

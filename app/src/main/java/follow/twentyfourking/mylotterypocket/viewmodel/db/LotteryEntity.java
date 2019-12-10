@@ -16,11 +16,8 @@ public class LotteryEntity {
     @ColumnInfo(name = "lottery_type")
     private String type;
 
-    public LotteryEntity(int id, long time, String number, String type) {
-        this.id = id;
-        this.time = time;
-        this.number = number;
-        this.type = type;
+    public LotteryEntity() {
+
     }
 
     public int getId() {

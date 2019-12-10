@@ -31,10 +31,12 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import follow.twentyfourking.mylotterypocket.R;
+import follow.twentyfourking.mylotterypocket.model.repo.MainRepository;
 import follow.twentyfourking.mylotterypocket.view.adapter.NumberListAdapter;
 import follow.twentyfourking.mylotterypocket.view.adapter.NumberShowAdapter;
 import follow.twentyfourking.mylotterypocket.view.delegate.IFragmentCallback;
 import follow.twentyfourking.mylotterypocket.viewmodel.data.SevenNumberListItemBean;
+import follow.twentyfourking.mylotterypocket.viewmodel.db.LotteryEntity;
 
 public class SevenLotteryFragment extends Fragment implements NumberListAdapter.IAdapterCallback {
     @BindView(R.id.tv_marquee)
@@ -72,10 +74,17 @@ public class SevenLotteryFragment extends Fragment implements NumberListAdapter.
     private float origY = 0.0f;
 
     private List<SevenNumberListItemBean> mNumberData;
+    private IFragmentCallback mCallback;
 
     public static Fragment newInstance(IFragmentCallback callback) {
         SevenLotteryFragment fragment = new SevenLotteryFragment();
+        fragment.setCallback(callback);
         return fragment;
+    }
+
+    private void setCallback(IFragmentCallback callback) {
+        this.mCallback = callback;
+
     }
 
     @Override
@@ -326,5 +335,12 @@ public class SevenLotteryFragment extends Fragment implements NumberListAdapter.
     @Override
     public void setVisibility() {
         mLlListContainer.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void saveLottery(LotteryEntity entity) {
+        if (mCallback.onGetRepository() instanceof MainRepository) {
+            ((MainRepository) mCallback.onGetRepository()).saveLotteryNumber(entity);
+        }
     }
 }
