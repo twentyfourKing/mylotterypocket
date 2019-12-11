@@ -14,7 +14,6 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -56,6 +55,8 @@ public class HistoryFragment extends Fragment {
     CheckBox mCbShuang;
     @BindView(R.id.rcv_history_list)
     RecyclerView mRecyclerView;
+    @BindView(R.id.tv_no_data_notify)
+    TextView mTvNoData;
 
     private Context mContext;
     private TimePickerView mTimePicker;
@@ -105,16 +106,26 @@ public class HistoryFragment extends Fragment {
         mViewModel.getLotteryDataLive().observe(getActivity(), new Observer<List<LotteryEntity>>() {
             @Override
             public void onChanged(List<LotteryEntity> lotteryEntities) {
-                if (lotteryEntities != null) {
+                if (lotteryEntities != null && lotteryEntities.size() > 0) {
                     mAdapter.setData(lotteryEntities);
+                    mRecyclerView.setVisibility(View.VISIBLE);
+                    mTvNoData.setVisibility(View.GONE);
+                } else {
+                    mRecyclerView.setVisibility(View.GONE);
+                    mTvNoData.setVisibility(View.VISIBLE);
                 }
             }
         });
         mViewModel.getLotteryDataLiveAll().observe(getActivity(), new Observer<List<LotteryEntity>>() {
             @Override
             public void onChanged(List<LotteryEntity> lotteryEntities) {
-                if (lotteryEntities != null) {
+                if (lotteryEntities != null && lotteryEntities.size() > 0) {
                     mAdapter.setData(lotteryEntities);
+                    mRecyclerView.setVisibility(View.VISIBLE);
+                    mTvNoData.setVisibility(View.GONE);
+                } else {
+                    mRecyclerView.setVisibility(View.GONE);
+                    mTvNoData.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -192,12 +203,6 @@ public class HistoryFragment extends Fragment {
         return simpleDateFormat.format(new Date(time));
     }
 
-    private String getTimeAll(long time) {
-        final String format = "yyyy-MM-dd HH:mm:ss";
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format);
-        return simpleDateFormat.format(time);
-    }
-
     private void initView() {
         mTimeStr = getTime(System.currentTimeMillis());
         mTvTime.setText(mTimeStr);
@@ -209,6 +214,7 @@ public class HistoryFragment extends Fragment {
         if (mCallback.onGetRepository() instanceof MainRepository) {
             ((MainRepository) mCallback.onGetRepository()).getLotteryAll();
         }
+        mRecyclerView.setVisibility(View.GONE);
 
     }
 
@@ -229,6 +235,8 @@ public class HistoryFragment extends Fragment {
                 }
             }
         });
+        mCbShuang.setChecked(false);
+        mCbQi.setChecked(false);
     }
 
     private void initRecyclerView() {
@@ -256,14 +264,14 @@ public class HistoryFragment extends Fragment {
                 Log.i("TTT", "onTimeSelectChanged");
             }
         }).setType(new boolean[]{true, true, true, false, false, false})
-                .isDialog(true) //默认设置false ，内部实现将DecorView 作为它的父控件。
+                .isDialog(true)
                 .addOnCancelClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         Log.i("TTT", "onCancelClickListener");
                     }
                 })
-                .setItemVisibleCount(5) //若设置偶数，实际值会加1（比如设置6，则最大可见条目为7）
+                .setItemVisibleCount(5)
                 .setLineSpacingMultiplier(2.0f)
                 .isAlphaGradient(true)
                 .build();

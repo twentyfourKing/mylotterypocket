@@ -58,8 +58,8 @@ public class SevenLotteryFragment extends Fragment implements NumberListAdapter.
     @BindView(R.id.rcv_number_list)
     RecyclerView mRecyclerViewList;
 
-    public static int CREATE_NUMBER_TIME = 200;//计算号码时间
-    public static int TRANSITION_NUMBER_TIME = 200;//号码动画时间
+    public static int CREATE_NUMBER_TIME = 1000;//计算号码时间
+    public static int TRANSITION_NUMBER_TIME = 1000;//号码动画时间
 
     private TranslateAnimation mTranslateAnimation;
     private Context mContext;

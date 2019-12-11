@@ -66,6 +66,7 @@ public class MainActivityDelegate implements IFragmentCallback<MainRepository> {
     private void setTab() {
         mTabs = new TabLayout.Tab[3];
         TabLayout.Tab tab1 = mTabLayout.newTab().setCustomView(createTabItemView("七星彩"));
+        tab1.getCustomView().findViewById(R.id.tv_tab_item_tag).setBackgroundResource(R.color.PaleGodenrod);//默认选中
         mTabLayout.addTab(tab1);
         mTabs[0] = tab1;
 
@@ -80,12 +81,13 @@ public class MainActivityDelegate implements IFragmentCallback<MainRepository> {
         mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
+                tab.getCustomView().findViewById(R.id.tv_tab_item_tag).setBackgroundResource(R.color.PaleGodenrod);
                 mViewPager.setCurrentItem(tab.getPosition(), false);
             }
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
-
+                tab.getCustomView().findViewById(R.id.tv_tab_item_tag).setBackgroundResource(R.color.app_white);
             }
 
             @Override
@@ -129,6 +131,7 @@ public class MainActivityDelegate implements IFragmentCallback<MainRepository> {
 
             }
         });
+        mViewPager.setOffscreenPageLimit(2);
         mViewPager.setAdapter(mAdapter);
     }
 

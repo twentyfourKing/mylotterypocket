@@ -79,3 +79,4 @@ fastlane/readme.md
 /captures
 .externalNativeBuild
 .cxx
+/app/release

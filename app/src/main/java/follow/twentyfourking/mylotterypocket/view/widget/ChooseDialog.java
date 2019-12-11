@@ -50,7 +50,7 @@ public class ChooseDialog {
 
     }
 
-    public void show(){
+    public void show() {
         mDialog.show();
     }
 
@@ -62,8 +62,8 @@ public class ChooseDialog {
     })
     public void onClick(View view) {
         int id = view.getId();
-        mCallback.onSatisfaction();
         if (id == R.id.tv_satisfaction) {
+            mCallback.onSatisfaction();
             mDialog.dismiss();
         } else if (id == R.id.tv_no_satisfaction) {
             mDialog.dismiss();

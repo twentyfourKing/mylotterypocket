@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">MyLotteryPocket</string>
+    <string name="app_name">随心选</string>
+    <string name="password">打包的密码 123456</string>
 </resources>

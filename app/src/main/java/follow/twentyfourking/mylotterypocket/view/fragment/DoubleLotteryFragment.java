@@ -72,7 +72,7 @@ public class DoubleLotteryFragment extends Fragment implements ChooseDialog.ICho
 
     private NumberListAdapter mAdapter;
     private List<SevenNumberListItemBean> mData;
-    private Random mRandom ;
+    private Random mRandom;
     private IFragmentCallback mCallback;
 
     public static Fragment newInstance(IFragmentCallback callback) {
@@ -152,28 +152,28 @@ public class DoubleLotteryFragment extends Fragment implements ChooseDialog.ICho
         mAllBallView.put(6, mTvBall7);
     }
 
-    private void setInitValue(){
-        mTvBall1.setText("?");
-        mTvBall2.setText("?");
-        mTvBall3.setText("?");
-        mTvBall4.setText("?");
-        mTvBall5.setText("?");
-        mTvBall6.setText("?");
-        mTvBall7.setText("?");
+    private void setInitValue() {
+        mTvBall1.setText("*");
+        mTvBall2.setText("*");
+        mTvBall3.setText("*");
+        mTvBall4.setText("*");
+        mTvBall5.setText("*");
+        mTvBall6.setText("*");
+        mTvBall7.setText("*");
     }
 
     private void startAnimation(int position) {
         View view = mAllBallView.get(position);
         ObjectAnimator objectAnimator1 = ObjectAnimator.ofFloat(view, View.TRANSLATION_Y, 0, -200);
-        objectAnimator1.setDuration(100);
+        objectAnimator1.setDuration(1000);
         objectAnimator1.setInterpolator(new AccelerateInterpolator());
         ObjectAnimator objectAnimator2 = ObjectAnimator.ofFloat(view, View.ROTATION, 0, 360, Animation.RELATIVE_TO_SELF, 1);
-        objectAnimator2.setDuration(100);
+        objectAnimator2.setDuration(1000);
         objectAnimator2.setInterpolator(new AccelerateInterpolator());
         ObjectAnimator objectAnimator3 = ObjectAnimator.ofFloat(view, View.TRANSLATION_X, 0, -200, 0, 200, 0);
-        objectAnimator3.setDuration(100);
+        objectAnimator3.setDuration(1000);
         ObjectAnimator objectAnimator4 = ObjectAnimator.ofFloat(view, View.TRANSLATION_Y, -200, 0);
-        objectAnimator4.setDuration(100);
+        objectAnimator4.setDuration(1000);
         objectAnimator4.setInterpolator(new AccelerateInterpolator());
         AnimatorSet animatorSet = new AnimatorSet();
 
@@ -277,7 +277,7 @@ public class DoubleLotteryFragment extends Fragment implements ChooseDialog.ICho
     public void onSatisfaction() {
         SevenNumberListItemBean bean = new SevenNumberListItemBean();
         List<String> data = new ArrayList<>();
-        for(String str : mBallNumData){
+        for (String str : mBallNumData) {
             data.add(str);
         }
         bean.setmNumberData(data);
@@ -297,7 +297,7 @@ public class DoubleLotteryFragment extends Fragment implements ChooseDialog.ICho
 
     @Override
     public void saveLottery(LotteryEntity entity) {
-        if(mCallback.onGetRepository() instanceof MainRepository){
+        if (mCallback.onGetRepository() instanceof MainRepository) {
             ((MainRepository) mCallback.onGetRepository()).saveLotteryNumber(entity);
         }
     }

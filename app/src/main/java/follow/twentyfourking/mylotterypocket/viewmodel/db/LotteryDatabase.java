@@ -18,7 +18,7 @@ public abstract class LotteryDatabase extends RoomDatabase {
         if (INSTANCE == null) {
             synchronized (lock) {
                 INSTANCE = Room.databaseBuilder(context, LotteryDatabase.class,
-                        "lootery,db").build();
+                        "lottery.db").build();
             }
         }
         return INSTANCE;
